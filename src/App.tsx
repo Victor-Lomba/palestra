@@ -10,10 +10,13 @@ import "xterm/css/xterm.css";
 
 const exampleArray = [
   {
-    path: "/examples/useStateExample",
+    path: "/examples/optimizationExample",
   },
   {
     path: "/examples/useStateExample",
+  },
+  {
+    path: "/examples/useEffectExample",
   },
   {
     path: "/examples/contextExample",

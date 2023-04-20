@@ -5,11 +5,94 @@ export const files: FileSystemTree = {
     directory: {
       examples: {
         directory: {
-          optimizationExemple: {
+          optimizationExample: {
             directory: {
               "index.tsx": {
                 file: {
                   contents: `
+import React,{ useCallback, useState, Profiler } from "react";
+import './styles.css';
+
+const initialSquares = {
+  squares: Array.from(new Array(16)).map((_, i) => ({
+    name: \`Quadrado \${i}\`,
+    isActive: false,
+  })),
+};
+
+export default function UseMemoExample() {
+  const [state, setState] = useState(initialSquares);
+
+  let handleClick = (i: number) => {
+    setState((state) => {
+      let squares = [...state.squares];
+      squares[i].isActive = !squares[i].isActive;
+      return {
+        ...state,
+        squares,
+      };
+    });
+  };
+
+  return (
+    <div className="grid">
+      {state.squares.map(({ isActive, name }, index) => (
+        <Toggle
+          on={isActive}
+          index={index}
+          onClick={handleClick}
+          key={name}
+          name={name}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Toggle({ on, onClick, index, name }: IToggle) {
+  function handleClick() {
+    onClick(index);
+  }
+
+  return (
+    <Profiler id={index} onRender={console.log}>
+      <div className={\`square \${on && "on"}\`} onClick={handleClick}>
+        <p>{name}</p>
+      </div>
+    </Profiler>
+  );
+}
+
+                  `,
+                },
+              },
+              "styles.css": {
+                file: {
+                  contents: `
+                  .square {
+                    width: 100px;
+                    height: 100px;
+                    background: red;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: white;
+                    font-family: sans-serif;
+                    user-select: none;
+                    cursor: pointer;
+                    transition: 0.3s;
+                  }
+                  
+                  .on {
+                    background: green;
+                  }
+                  
+                  .grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    gap: 20px;
+                    width: fit-content;
+                  }
                   
                   `,
                 },
@@ -33,7 +116,7 @@ export default function UseStateExemple() {
   }
 
   return (
-    <div>
+    <div className="containerExample1">
       <h1>{count1}</h1>
       <button onClick={incrementCount}>increment</button>
       <hr />
@@ -46,7 +129,7 @@ export default function UseStateExemple() {
               "styles.css": {
                 file: {
                   contents: `
-                  button {
+                  .containerExample1 button {
                     box-sizing: border-box;
                     -webkit-appearance: none;
                        -moz-appearance: none;
@@ -74,20 +157,20 @@ export default function UseStateExemple() {
                     font-family: 'Montserrat', sans-serif;
                     font-weight: 700;
                   }
-                  button:hover, button:focus {
+                  .containerExample1 button:hover, .containerExample1 button:focus {
                     color: #fff;
                     outline: 0;
                   }
 
-                  button {
+                  .containerExample1 button {
                     -webkit-transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
                     transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
                   }
-                  button:hover {
+                  .containerExample1 button:hover {
                     box-shadow: 0 0 40px 40px #e74c3c inset;
                   }
 
-                  #root > div {
+                  .containerExample1 {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -102,6 +185,80 @@ export default function UseStateExemple() {
               },
             },
           },
+          useEffectExample: {
+            directory: {
+              "index.tsx": {
+                file: {
+                  contents: `
+import React, {useState, useEffect, Profiler} from 'react'
+
+interface Repo {
+name: string;
+description: string;
+}
+
+export default function ReposExample() {
+const [repos, setRepos] = useState<Repo[]>([])
+const [filteredRepos, setFilteredRepos] = useState<Repo[]>()
+
+const [search, setSearch] = useState('');
+
+useEffect(() => {
+  fetch('https://api.github.com/users/victor-lomba/repos')
+  .then(response => response.json())
+  .then(data => setRepos(data))
+}, []);
+
+
+useEffect(() => {
+  setFilteredRepos(repos.filter(repo => repo.name.includes(search)));
+}, [search])
+
+return (
+  <Profiler 
+  id="search"
+  onRender={() => {
+    console.log("Renderizou a lista");
+  }}>
+    <div>
+      <input
+        name="search"
+        type="text"
+        placeholder="Buscar..."
+        onChange={e => setSearch(e.target.value)}
+        value={search} />
+
+        {search.length > 0 ? (
+          <ul>
+            {filteredRepos.map(repo => {
+              return (
+                <li key={repo.name}>
+                  {repo.name}
+                </li>
+              )
+            })}
+          </ul>
+        ) : (
+          <ul>
+          {repos.map(repo => {
+            return (
+              <li key={repo.name}>
+                {repo.name}
+              </li>
+            )
+          })}
+          </ul>
+        )}
+    </div>
+  </Profiler>
+      )
+}
+
+                  `,
+                },
+              },
+            },
+          },
 
           contextExample: {
             directory: {
@@ -109,6 +266,7 @@ export default function UseStateExemple() {
                 file: {
                   contents: `
 import React,{ ReactNode, useMemo, useState, Profiler, createContext, useContext } from "react";
+import './styles.css'
 
 interface IUserContextProvider {
   children: ReactNode;
@@ -132,6 +290,7 @@ export function UserContextProvider({ children }: IUserContextProvider) {
       value={{ email, age, name }}
     >
       <input
+        className="inputExample2"
         type="text"
         onChange={(e) => {
           setEmail(e.target.value);
@@ -175,7 +334,15 @@ export default function ContextExemple() {
               },
               "styles.css": {
                 file: {
-                  contents: ``,
+                  contents: `
+                  .inputExample2 {
+                    margin: 0 auto;
+	                  padding: 10px;
+	                  border: none;
+	                  margin-bottom: 10px;
+	                  border-radius: 50px;
+                  }
+                  `,
                 },
               },
             },
@@ -189,6 +356,8 @@ export default function ContextExemple() {
           import { createBrowserRouter, RouterProvider } from "react-router-dom";
           import UseStateExample from "./examples/useStateExample";
           import ContextExemple from "./examples/contextExample";
+          import OptimizationExample from "./examples/optimizationExample";
+          import UseEffectExample from "./examples/useEffectExample";
           
           const router = createBrowserRouter([
             {
@@ -200,8 +369,16 @@ export default function ContextExemple() {
               element: <UseStateExample />,
             },
             {
+              path: "/examples/optimizationExample",
+              element: <OptimizationExample />,
+            },
+            {
               path: "/examples/contextExample",
               element: <ContextExemple />,
+            },
+            {
+              path: "/examples/useEffectExample",
+              element: <UseEffectExample />,
             },
           ]);
           
