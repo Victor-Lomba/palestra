@@ -1,0 +1,68 @@
+aside {
+  width: 12%;
+  height: 100vh;
+}
+
+iframe {
+  height: 100vw !important;
+  background: #252526;
+  border: none;
+}
+
+iframe h1 {
+  color: white;
+}
+
+.App {
+  display: flex;
+}
+
+.middle-column {
+  width: 45%;
+  flex: 1;
+}
+
+.middle-column-top {
+  height: 65vh;
+}
+
+.middle-column-bottom {
+  height: 30%;
+}
+
+.terminal {
+  width: 100%;
+  height: 100%;
+}
+
+.xterm .xterm-viewport {
+  overflow-y: hidden !important;
+}
+
+aside {
+  background-color: #252526;
+}
+
+.aside-button {
+  background: none;
+  width: 100%;
+  height: 60px;
+  color: white;
+  border: 1px solid transparent;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  transition: 0.2s ease-in-out;
+}
+
+.aside-button.selected {
+  color: #4fe1f9;
+}
+
+.aside-button:hover {
+  color: #4fe1f9;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.aside-button:disabled {
+  background-color: rgb(70, 70, 70);
+  color: red;
+}
