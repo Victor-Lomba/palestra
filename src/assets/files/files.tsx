@@ -187,10 +187,38 @@ export default function UseStateExemple() {
           },
           useEffectExample: {
             directory: {
+              "styles.css": {
+                file: {
+                  contents: `
+                  ul {
+                    color: #fff;
+                    list-style-type: none;
+                    max-height: 500px;
+                    overflow: auto;
+                  }
+                  li {
+                    background: #505055;
+                    border-radius: 4px;
+                    padding: 6px;
+                    margin-bottom: 4px;
+                    max-width: 250px;
+                  }
+
+                  .inputExampleRepo {
+                    margin: 0 auto;
+	                  padding: 10px;
+	                  border: none;
+	                  margin-bottom: 10px;
+	                  border-radius: 50px;
+                  }
+                  `,
+                },
+              },
               "index.tsx": {
                 file: {
                   contents: `
-import React, {useState, useEffect, Profiler} from 'react'
+import React, {useState, useEffect, Profiler} from 'react';
+import './styles.css';
 
 interface Repo {
 name: string;
@@ -204,7 +232,7 @@ const [filteredRepos, setFilteredRepos] = useState<Repo[]>()
 const [search, setSearch] = useState('');
 
 useEffect(() => {
-  fetch('https://api.github.com/users/victor-lomba/repos')
+  fetch('https://api.github.com/users/ottomated/repos')
   .then(response => response.json())
   .then(data => setRepos(data))
 }, []);
@@ -224,6 +252,7 @@ return (
       <input
         name="search"
         type="text"
+        className="inputExampleRepo"
         placeholder="Buscar..."
         onChange={e => setSearch(e.target.value)}
         value={search} />
